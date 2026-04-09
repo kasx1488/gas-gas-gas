@@ -1,22 +1,21 @@
-// ── CURSOR
-  const cursor = document.getElementById('cursor');
+// ── CURSOR GLOW ONLY (default browser cursor is used)
   const glow = document.getElementById('cursor-glow');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = (e.clientX) + 'px';
-    cursor.style.top = (e.clientY) + 'px';
-    glow.style.left = e.clientX + 'px';
-    glow.style.top = e.clientY + 'px';
-  });
+  if (glow) {
+    document.addEventListener('mousemove', e => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+  }
 
   // ── COUNTDOWN
-  // Логика: таймер 3 часа.
-  // Если с последнего визита прошло > 1 часа — таймер сбрасывается.
-  // Если < 1 часа — продолжает с того места где остановился.
+  // Logic: 3-hour timer.
+  // If away > 1 hour since last visit — reset timer.
+  // If < 1 hour — continue from where it left off.
   (function() {
     const KEY_END  = 'sc_end';
     const KEY_LAST = 'sc_last';
-    const DURATION  = 3 * 3600000;   // 3 часа
-    const MAX_AWAY  = 1 * 3600000;   // порог отсутствия = 1 час
+    const DURATION  = 3 * 3600000;   // 3 hours
+    const MAX_AWAY  = 1 * 3600000;   // away threshold = 1 hour
 
     const now      = Date.now();
     const lastSeen = parseInt(localStorage.getItem(KEY_LAST) || '0');
@@ -25,15 +24,15 @@
 
     let endTime;
     if (!storedEnd || awayMs > MAX_AWAY) {
-      // Первый визит или отсутствовал > 1 часа — сбросить
+      // First visit or away > 1 hour — reset
       endTime = now + DURATION;
       localStorage.setItem(KEY_END, endTime);
     } else {
-      // Вернулся в течение часа — продолжить
+      // Returned within an hour — continue
       endTime = storedEnd;
     }
 
-    // Обновляем время последнего визита
+    // Update last seen time
     localStorage.setItem(KEY_LAST, now);
 
     function tick() {
