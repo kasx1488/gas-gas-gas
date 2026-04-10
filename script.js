@@ -53,3 +53,18 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.08 });
   document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+  // ── MOBILE STICKY CTA — hide when join section is in view
+  (function() {
+    const joinSection = document.getElementById('join');
+    const mobileCta   = document.getElementById('mobile-cta');
+    if (!joinSection || !mobileCta) return;
+
+    const joinObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        mobileCta.style.display = e.isIntersecting ? 'none' : '';
+      });
+    }, { threshold: 0.15 });
+
+    joinObs.observe(joinSection);
+  })();
