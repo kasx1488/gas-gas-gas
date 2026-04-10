@@ -8,14 +8,11 @@
   }
 
   // ── COUNTDOWN
-  // Logic: 3-hour timer.
-  // If away > 1 hour since last visit — reset timer.
-  // If < 1 hour — continue from where it left off.
   (function() {
     const KEY_END  = 'sc_end';
     const KEY_LAST = 'sc_last';
-    const DURATION  = 3 * 3600000;   // 3 hours
-    const MAX_AWAY  = 1 * 3600000;   // away threshold = 1 hour
+    const DURATION  = 3 * 3600000;
+    const MAX_AWAY  = 1 * 3600000;
 
     const now      = Date.now();
     const lastSeen = parseInt(localStorage.getItem(KEY_LAST) || '0');
@@ -24,15 +21,12 @@
 
     let endTime;
     if (!storedEnd || awayMs > MAX_AWAY) {
-      // First visit or away > 1 hour — reset
       endTime = now + DURATION;
       localStorage.setItem(KEY_END, endTime);
     } else {
-      // Returned within an hour — continue
       endTime = storedEnd;
     }
 
-    // Update last seen time
     localStorage.setItem(KEY_LAST, now);
 
     function tick() {
@@ -54,17 +48,39 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.fade').forEach(el => io.observe(el));
 
-  // ── MOBILE STICKY CTA — hide when join section is in view
+  // ── MOBILE STICKY CTA
+  // Shows only when the hero "Get Access" button has scrolled out of view.
+  // Hides again when the join section (pricing) becomes visible.
   (function() {
+    const heroCta   = document.querySelector('.hero-cta-main');
     const joinSection = document.getElementById('join');
-    const mobileCta   = document.getElementById('mobile-cta');
-    if (!joinSection || !mobileCta) return;
+    const mobileCta = document.getElementById('mobile-cta');
+    if (!mobileCta) return;
 
-    const joinObs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        mobileCta.style.display = e.isIntersecting ? 'none' : '';
-      });
-    }, { threshold: 0.15 });
+    let heroVisible = true;   // hero button starts on screen
+    let joinVisible = false;
 
-    joinObs.observe(joinSection);
+    function update() {
+      if (!heroVisible && !joinVisible) {
+        mobileCta.classList.add('visible');
+      } else {
+        mobileCta.classList.remove('visible');
+      }
+    }
+
+    if (heroCta) {
+      const heroObs = new IntersectionObserver(entries => {
+        heroVisible = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.5 });
+      heroObs.observe(heroCta);
+    }
+
+    if (joinSection) {
+      const joinObs = new IntersectionObserver(entries => {
+        joinVisible = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.15 });
+      joinObs.observe(joinSection);
+    }
   })();
