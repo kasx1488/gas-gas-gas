@@ -850,3 +850,67 @@
 @media (min-width: 992px) {
   .hero .container { max-width: 70%; padding-left: 0; margin-left: 0; }
 }
+
+/* ── HERO CTA ── */
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+.hero-cta-main {
+  width: auto;
+  padding: 16px 40px;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+}
+.hero-ghost-link {
+  font-size: 0.875rem;
+  color: var(--muted2);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.hero-ghost-link:hover { color: var(--accent); }
+
+/* ── MOBILE STICKY CTA ── */
+.mobile-cta {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .mobile-cta {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 20px 18px;
+    background: rgba(8,8,8,0.96);
+    border-top: 1px solid rgba(200,255,0,0.18);
+    z-index: 200;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .mobile-cta .cta-btn {
+    font-size: 1rem;
+    padding: 14px 28px;
+    border-radius: 10px;
+  }
+  /* Push footer content above sticky bar on mobile */
+  footer {
+    padding-bottom: 80px;
+  }
+}
+
+/* small phones — tighten hero-cta */
+@media (max-width: 575.98px) {
+  .hero-cta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .hero-cta-main { width: 100%; text-align: center; }
+}
