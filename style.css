@@ -729,7 +729,7 @@
     align-items: center;
     gap: 20px;
     margin-top: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 36px;
   }
   .hero-social-link {
     display: inline-flex;
@@ -892,6 +892,16 @@
     z-index: 200;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    /* hidden by default — slides up when .visible added by JS */
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  .mobile-cta.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
   .mobile-cta .cta-btn {
     font-size: 1rem;
@@ -913,4 +923,10 @@
     margin-bottom: 28px;
   }
   .hero-cta-main { width: 100%; text-align: center; }
+}
+
+/* ── hero-tag inside socials row — reset standalone styles ── */
+.hero-socials .hero-tag {
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
